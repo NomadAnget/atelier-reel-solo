@@ -38,6 +38,9 @@
   .badge{font-size:11px;padding:2px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
   .b-run{background:var(--chip);color:var(--accent)} .b-ok{background:rgba(26,156,106,.14);color:var(--ok)}
   .b-err{background:rgba(216,74,74,.14);color:var(--err)} .b-q{background:var(--chip);color:var(--muted)}
+  .cancel-btn{padding:4px 12px;font-size:12px;font-weight:500;border:1px solid var(--line);
+    border-radius:8px;background:transparent;color:var(--err);cursor:pointer}
+  .cancel-btn:hover{border-color:var(--err)} .cancel-btn:disabled{opacity:.5;cursor:default}
   .bar{height:7px;background:var(--track);border-radius:99px;overflow:hidden;margin:14px 0 6px}
   .bar > i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s}
   .pctline{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
@@ -87,7 +90,10 @@
   <div class="card" id="activeCard" style="display:none">
     <div class="active-head">
       <span class="active-title" id="aTitle">—</span>
-      <span class="badge b-q" id="aBadge">—</span>
+      <span style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+        <button id="aCancel" class="cancel-btn" style="display:none">取消任务</button>
+        <span class="badge b-q" id="aBadge">—</span>
+      </span>
     </div>
     <div class="bar"><i id="aFill"></i></div>
     <div class="pctline"><span id="aPhase">—</span><span id="aPct">0%</span></div>
@@ -154,6 +160,17 @@ function renderActive(){
   $('aTitle').textContent = shortUrl(r.video_url) + '  ·  ' + (LANG[r.target_lang]||r.target_lang||'');
   const [txt,cls] = ST[r.status]||[r.status,'b-q'];
   $('aBadge').textContent = txt; $('aBadge').className = 'badge '+cls;
+  // 取消按钮:仅 queued/running 显示;点了发 web/job/cancel_requested(卡死引擎子进程随之强杀)
+  const cb=$('aCancel'), cancelable=(r.status==='queued'||r.status==='running');
+  cb.style.display = cancelable?'':'none'; cb.disabled=false; cb.textContent='取消任务';
+  cb.onclick = async ()=>{
+    cb.disabled=true; cb.textContent='取消中…';
+    try{
+      await fetch('/api/command/web/job/cancel_requested',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({job_id:r.job_id})})
+        .then(x=>{ if(!x.ok) throw new Error('取消失败 '+x.status); });
+    }catch(e){ cb.disabled=false; cb.textContent='取消任务'; alert(e.message); }
+  };
   const p = r.status==='succeeded' ? 1 : pct01(r);
   $('aFill').style.width = (p*100).toFixed(0)+'%';
   $('aPct').textContent = (p*100).toFixed(0)+'%';
