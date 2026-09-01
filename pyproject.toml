@@ -18,5 +18,8 @@ dependencies = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.metadata]
+allow-direct-references = true      # 允许 atelier-core @ git+… 直接引用依赖
+
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
