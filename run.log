@@ -1,0 +1,37 @@
+18:06:27 INFO     [CORE/Main] 基建配置来源:config.toml
+18:06:27 INFO     [CORE/Bus] 总线挂载域 daemons(发布 3 topic,订阅 16)
+18:06:27 INFO     [CORE/Bus] 总线挂载域 engines(发布 0 topic,订阅 1)
+18:06:27 INFO     [CORE/Bus] 总线挂载域 platform_adapters(发布 1 topic,订阅 2)
+18:06:27 INFO     [CORE/Bus] 总线挂载域 publishers(发布 3 topic,订阅 4)
+18:06:27 INFO     [CORE/Bus] 总线挂载域 scheduler(发布 7 topic,订阅 11)
+18:06:27 INFO     [CORE/Bus] 总线挂载域 task(发布 3 topic,订阅 7)
+18:06:27 INFO     [CORE/Bus] 总线挂载域 web(发布 25 topic,订阅 0)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 daemons_allocations
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:提升列 daemons_allocations.start_at(REAL)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:提升列 daemons_allocations.task_type(TEXT)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 daemons_profile
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 daemons_settings
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 daemons_digest_sources
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 daemons_news_items(类型化)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 daemons_channels(类型化)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 daemons_videos(类型化)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 engines_settings
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 platform_adapters_connections
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:提升列 platform_adapters_connections.provider(TEXT)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 platform_adapters_ingest_settings
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 platform_adapters_cookies
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 platform_adapters_youtube_token
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 scheduler_jobs(类型化)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 scheduler_channel_targets
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:提升列 scheduler_channel_targets.channel_id(TEXT)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 task_job_checkpoints(类型化)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 task_glossary_terms
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:提升列 task_glossary_terms.term(TEXT)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:提升列 task_glossary_terms.status(TEXT)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:提升列 task_glossary_terms.source(TEXT)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽:建表 hub_logs(类型化)
+18:06:28 INFO     [CORE/StorageHub] 存储枢纽就绪 db=data/hub/store.db 表=17
+18:06:28 INFO     [ENGINES/Settings] 运行时设置首次落种 表=engines_settings(默认=模型代码内默认值)
+18:06:31 INFO     [WEB/WebService] web 域就绪:前端(dist)+ 通用端点,单端口对外
+18:06:31 INFO     [CORE/Main] atelier-reel-solo 运行中(7 域,port=8099)。Ctrl-C 停机
+18:06:31 INFO     [SCHEDULER/Scheduler] scheduler worker 上岗(已注册管线:video_translate)

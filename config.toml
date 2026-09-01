@@ -3,12 +3,12 @@
 [paths]
 journal_db = "data/hub/journal.db"
 store_db   = "data/hub/store.db"
-models_dir = "checkpoints"           # 引擎权重根(rife/indextts/spacy/hf_cache…)
+models_dir = "/home/Architecture/checkpoints"   # 引擎权重根(绝对路径,复用现有 324G 权重)
 
 [web]
 enabled  = true
 host     = "0.0.0.0"
-port     = 8000
+port     = 8099
 dist_dir = "frontend/dist"   # in-repo 单表单前端构建产物
 
 [gateway]

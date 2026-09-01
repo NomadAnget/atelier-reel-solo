@@ -11,7 +11,7 @@
 - **管线子模块**:`src/pipelines/video`(atelier-pipeline-video)
 - **前端**:in-repo 单表单(`src/web/frontend`,只经命令/查询/SSE/快照四形状)
 
-不含:daemons(监控)、media、pipeline-digest、sentinel。publishers 仅契约桩(gateway 关、fill_noop 空转)满足 scheduler/web 的发布契约闭环;不实际发布。
+不含:media、pipeline-digest、sentinel。**daemons 作契约桩挂载**(fill_noop 空转、不起监控循环)——因 web/scheduler/platform_adapters 声明了一批只被 daemons 订阅的持久 topic(monitor/*、digest/*、job/status_changed、auth/expired),不挂它会悬空致组装拒挂;桩满足闭环,功能上仍无监控(循环不启)。publishers 仅契约桩(gateway 关、fill_noop 空转)满足 scheduler/web 的发布契约闭环;不实际发布。
 
 ## 跑
 ```bash

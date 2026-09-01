@@ -19,3 +19,6 @@
 [submodule "src/pipelines/video"]
 	path = src/pipelines/video
 	url = http://debian.lan:3257/Carnation/atelier-pipeline-video.git
+[submodule "src/daemons"]
+	path = src/daemons
+	url = http://debian.lan:3257/Carnation/atelier-daemons.git

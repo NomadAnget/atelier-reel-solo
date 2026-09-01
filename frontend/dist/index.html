@@ -104,16 +104,21 @@ function startPoll(){
     const j = rows[0]; if (!j) return;
     setPct(Math.round(j.progress||0));
     $('phase').textContent = j.progress_message || statusText(j.status);
-    if (j.status === 'succeeded'){ done('✓ 完成 —— 成片已生成', 'ok'); }
+    if (j.status === 'succeeded'){ doneOk(); }
     else if (j.status === 'failed'){ done('✗ 失败:'+(j.error_msg||'见日志'), 'err'); }
     else if (j.status === 'cancelled'){ done('已取消', 'err'); }
   }, 1500);
 }
 function done(text, cls){ clearInterval(poll); setMsg(text, cls); $('go').disabled = false; }
+function doneOk(){
+  clearInterval(poll); $('go').disabled = false; setPct(100);
+  $('msg').className = 'msg ok';
+  $('msg').innerHTML = '✓ 完成 —— <a href="/api/jobs/'+encodeURIComponent(jobId)+'/result">下载成片</a>';
+}
 
 async function q(table, params){
-  const p = new URLSearchParams({table, ...params});
-  const r = await fetch('/api/query?'+p.toString());
+  const p = new URLSearchParams(params);
+  const r = await fetch('/api/store/'+table+'?'+p.toString());
   if (!r.ok) return [];
   const d = await r.json(); return d.rows || [];
 }
