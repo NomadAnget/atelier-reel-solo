@@ -1,0 +1,12 @@
+__pycache__/
+*.py[oc]
+.venv/
+data/
+logs/
+*.db
+*.db-wal
+*.db-shm
+checkpoints/*
+.env
+tmp/
+src/web/frontend/node_modules/

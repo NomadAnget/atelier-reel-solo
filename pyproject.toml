@@ -1,0 +1,22 @@
+[project]
+name = "atelier-reel-solo"
+version = "0.1.0"
+description = "Atelier 变体:单一操作表单的视频翻译工具(仅本地化)"
+requires-python = "==3.11.*"
+dependencies = [
+    # 平台内核(总线+存储枢纽+装配+组装原语);变体域/管线经绝对导入 atelier_core.*
+    "atelier-core @ git+http://debian.lan:3257/Carnation/atelier-core.git",
+    # ⚠ 引擎栈:pipeline-video/engines 运行需完整 GPU 推理依赖
+    # (torch/faster-whisper/ctranslate2/demucs/rife/indextts/paddleocr/ollama/…),
+    # 按 CUDA 版本锁死。部署时从旧 Architecture pyproject 的重型依赖段整体纳入。
+]
+
+# 变体 = 组装:core(依赖)+ video 闭包域(子模块挂 src/<域>)+ 管线(src/pipelines/video)
+# + in-repo 单表单前端 + 本文件的 serve 接线。域根包 = src(main.py DOMAIN_ROOT=__package__)。
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]

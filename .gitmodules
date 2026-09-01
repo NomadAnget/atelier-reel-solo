@@ -1,0 +1,21 @@
+[submodule "src/web"]
+	path = src/web
+	url = http://debian.lan:3257/Carnation/atelier-web.git
+[submodule "src/scheduler"]
+	path = src/scheduler
+	url = http://debian.lan:3257/Carnation/atelier-scheduler.git
+[submodule "src/task"]
+	path = src/task
+	url = http://debian.lan:3257/Carnation/atelier-task.git
+[submodule "src/engines"]
+	path = src/engines
+	url = http://debian.lan:3257/Carnation/atelier-engines.git
+[submodule "src/platform_adapters"]
+	path = src/platform_adapters
+	url = http://debian.lan:3257/Carnation/atelier-platform_adapters.git
+[submodule "src/publishers"]
+	path = src/publishers
+	url = http://debian.lan:3257/Carnation/atelier-publishers.git
+[submodule "src/pipelines/video"]
+	path = src/pipelines/video
+	url = http://debian.lan:3257/Carnation/atelier-pipeline-video.git

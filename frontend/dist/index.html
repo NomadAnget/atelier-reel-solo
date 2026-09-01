@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>视频翻译</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#1a1f2b; --muted:#6b7488; --line:#e6e9ef;
+    --accent:#3b6ef5; --accent-ink:#fff; --ok:#1a9c6a; --err:#d84a4a; --track:#eef1f6;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#0f131a; --card:#171d27; --ink:#e8ecf3; --muted:#8b95a8; --line:#262e3b;
+    --accent:#5b84f7; --track:#212934;
+  }}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+    display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    width:100%;max-width:520px;padding:28px 28px 24px;box-shadow:0 8px 30px rgba(0,0,0,.06)}
+  h1{margin:0 0 4px;font-size:20px;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+  label{display:block;font-size:12px;color:var(--muted);margin:14px 0 6px;letter-spacing:.3px}
+  input,select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;
+    background:transparent;color:var(--ink);font-size:14px;outline:none}
+  input:focus,select:focus{border-color:var(--accent)}
+  button{width:100%;margin-top:20px;padding:12px;border:0;border-radius:10px;
+    background:var(--accent);color:var(--accent-ink);font-size:15px;font-weight:600;cursor:pointer}
+  button:disabled{opacity:.55;cursor:default}
+  .status{margin-top:20px;display:none}
+  .status.on{display:block}
+  .bar{height:8px;background:var(--track);border-radius:99px;overflow:hidden;margin:10px 0}
+  .bar > i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s}
+  .line{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+  .msg{margin-top:8px;font-size:13px}
+  .msg.ok{color:var(--ok)} .msg.err{color:var(--err)}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>视频翻译</h1>
+    <div class="sub">提交一个视频,选目标语言,得到本地化配音成片。</div>
+
+    <form id="f">
+      <label>视频源(YouTube URL 或本地路径)</label>
+      <input id="url" placeholder="https://www.youtube.com/watch?v=… 或 data/jobs/…/x.mp4" required>
+      <label>目标语言</label>
+      <select id="lang">
+        <option value="zh">简体中文</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="es">Español</option>
+      </select>
+      <button id="go" type="submit">开始翻译</button>
+    </form>
+
+    <div class="status" id="st">
+      <div class="line"><span id="phase">已提交</span><span id="pct">0%</span></div>
+      <div class="bar"><i id="fill"></i></div>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+
+<script>
+const $ = id => document.getElementById(id);
+let poll = null, jobId = null;
+
+$('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  $('go').disabled = true;
+  $('st').classList.add('on');
+  setMsg('', ''); $('phase').textContent = '已提交'; setPct(0);
+  try {
+    // 命令:创建视频翻译任务(web/job/requested → scheduler)
+    await fetch('/api/command/web/job/requested', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ video_url: $('url').value.trim(),
+                             task_type: 'video_translate', target_lang: $('lang').value })
+    }).then(r => { if(!r.ok) throw new Error('提交失败 '+r.status); });
+    // 找到刚建的任务(按创建时间倒序取本 URL 的最新一条)
+    jobId = await findJob($('url').value.trim());
+    if (!jobId) throw new Error('任务已提交,但未在列表中找到(稍后刷新查看)');
+    startPoll();
+  } catch (err) {
+    setMsg(err.message, 'err'); $('go').disabled = false;
+  }
+});
+
+async function findJob(url){
+  for (let i=0;i<10;i++){
+    const rows = await q('scheduler_jobs', {order:'created_at:desc', limit:20});
+    const hit = rows.find(r => r.video_url === url);
+    if (hit) return hit.job_id;
+    await sleep(600);
+  }
+  return null;
+}
+
+function startPoll(){
+  clearInterval(poll);
+  poll = setInterval(async () => {
+    const rows = await q('scheduler_jobs', {job_id: jobId, limit:1});
+    const j = rows[0]; if (!j) return;
+    setPct(Math.round(j.progress||0));
+    $('phase').textContent = j.progress_message || statusText(j.status);
+    if (j.status === 'succeeded'){ done('✓ 完成 —— 成片已生成', 'ok'); }
+    else if (j.status === 'failed'){ done('✗ 失败:'+(j.error_msg||'见日志'), 'err'); }
+    else if (j.status === 'cancelled'){ done('已取消', 'err'); }
+  }, 1500);
+}
+function done(text, cls){ clearInterval(poll); setMsg(text, cls); $('go').disabled = false; }
+
+async function q(table, params){
+  const p = new URLSearchParams({table, ...params});
+  const r = await fetch('/api/query?'+p.toString());
+  if (!r.ok) return [];
+  const d = await r.json(); return d.rows || [];
+}
+const statusText = s => ({queued:'排队中',running:'处理中',succeeded:'完成',failed:'失败',cancelled:'已取消'}[s]||s);
+const setPct = n => { $('pct').textContent = n+'%'; $('fill').style.width = n+'%'; };
+const setMsg = (t,c) => { const m=$('msg'); m.textContent=t; m.className='msg'+(c?' '+c:''); };
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+</script>
+</body>
+</html>

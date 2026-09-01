@@ -1,0 +1,17 @@
+# atelier-reel-solo 基建配置(重启级)。域根=src;前端 in-repo。
+
+[paths]
+journal_db = "data/hub/journal.db"
+store_db   = "data/hub/store.db"
+models_dir = "checkpoints"           # 引擎权重根(rife/indextts/spacy/hf_cache…)
+
+[web]
+enabled  = true
+host     = "0.0.0.0"
+port     = 8000
+dist_dir = "frontend/dist"   # in-repo 单表单前端构建产物
+
+[gateway]
+enabled = false                      # 仅本地化:不接远程发布引擎;publishers 桩空转
+
+# [logger] level="INFO"
