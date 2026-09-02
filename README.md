@@ -2,7 +2,7 @@
 
 **Atelier 变体:单一操作表单的视频翻译工具(仅本地化)。**
 
-> **宪法在内核仓**:体系的架构/契约/纪律以 [atelier-core/docs/](http://debian.lan:3257/Carnation/atelier-core/src/branch/master/docs)(CONSTITUTION + architecture/bus/storage/domains/boot/logging)为准。本 README 只给本变体的组装与运行导引。
+> **宪法在内核仓**:体系的架构/契约/纪律以 [atelier-core/docs/](https://forgejo.hurcaguari.top/Carnation/atelier-core/src/branch/master/docs)(CONSTITUTION + architecture/bus/storage/domains/boot/logging)为准。本 README 只给本变体的组装与运行导引。
 
 
 提交一个视频(YouTube URL / 本地路径)+ 目标语言 → 跑视频翻译管线 → 取本地化成片。
@@ -35,7 +35,7 @@ uv run python -m src.main --config config.toml
 ```bash
 git submodule update --init --recursive
 uv pip install --python /home/Architecture/.venv/bin/python --no-deps \
-    "atelier-core @ git+http://debian.lan:3257/Carnation/atelier-core.git"
+    "atelier-core @ git+https://forgejo.hurcaguari.top/Carnation/atelier-core.git"
 /home/Architecture/.venv/bin/python -m src.main --config config.toml
 ```
 
