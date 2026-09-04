@@ -22,3 +22,6 @@
 [submodule "src/daemons"]
 	path = src/daemons
 	url = https://forgejo.hurcaguari.top/Carnation/atelier-daemons.git
+[submodule "frontend"]
+	path = frontend
+	url = https://forgejo.hurcaguari.top/Carnation/atelier-frontend.git

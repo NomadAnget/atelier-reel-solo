@@ -6,10 +6,14 @@ store_db   = "data/hub/store.db"
 models_dir = "/home/Architecture/checkpoints"   # 引擎权重根(绝对路径,复用现有 324G 权重)
 
 [web]
-enabled  = true
-host     = "0.0.0.0"
-port     = 8099
-dist_dir = "frontend/dist"   # in-repo 单表单前端构建产物
+enabled    = true
+host       = "0.0.0.0"
+port       = 8099
+dist_dir   = "frontend/dist"   # 共享前端子模块(atelier-frontend);单一构建,页面按后端能力动态显隐
+# 排除页(域挂着但纯本地化变体不显):无监控(daemons 在但不跑 MonitorService)、
+# 无闲时排产、无发布(publishers dormant)。日报/观测无 news_digest 管线/sentinel 域自动隐藏。
+# 结果可见:总览/任务/名词/设置/日志。
+hide_pages = ["monitor", "scheduler", "accounts"]
 
 [gateway]
 enabled = false                      # 仅本地化:不接远程发布引擎;publishers 桩空转
