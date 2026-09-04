@@ -72,7 +72,7 @@ async def serve(config_path: str | None = None) -> None:
         "on_settings_edit": lambda e: svc["engines_settings_edit"](e),
     }
     platform_adapters_handlers: Handlers = {
-        "on_accounts_snapshot": lambda e: svc["connections"].on_accounts_snapshot(e),
+        # 注:on_accounts_snapshot(engine_ 账号镜像)已随 publishers 去镜像删除。
         "on_settings_edit":     lambda e: svc["ingest"].on_settings_edit(e),
     }
     remote_handlers: dict[str, Handlers] = {
