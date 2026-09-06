@@ -117,13 +117,8 @@ async def serve(config_path: str | None = None) -> None:
         task_process=None)          # task 本地,无进程域控制器
 
     # ── platform_adapters(YouTube 采集;仅本地化不发布,但下载需采集门面)──────────────
-    from .platform_adapters.impl.service import ConnectionService
-    svc["connections"] = ConnectionService(
-        windows["platform_adapters"], store, store_windows["platform_adapters"])
     from .platform_adapters import ingest as pa_ingest
-    from .platform_adapters import youtube_token
     svc["ingest"] = pa_ingest.init(store, store_windows["platform_adapters"])
-    youtube_token.init(store, store_windows["platform_adapters"])
 
     scheduler_worker = asyncio.create_task(svc["scheduler"].run_worker(), name="scheduler_worker")
     housekeeping_task = asyncio.create_task(
