@@ -395,9 +395,9 @@ def refresh_parent_candidate(parent_repo: str, number: int, branch: str, old_hea
         parent_sha=commit["sha"], base_sha=base_sha, parent_repo=parent_repo,
         parent_pr_number=number, parent_branch=branch,
     )
-    api("PATCH", f"/repos/{parent_repo}/pulls/{number}", {"body": body})
     api("PATCH", f"/repos/{parent_repo}/git/refs/heads/{urllib.parse.quote(branch, safe='/')}",
         {"sha": commit["sha"], "force": False})
+    api("PATCH", f"/repos/{parent_repo}/pulls/{number}", {"body": body})
     print("Variant master advanced during validation; rebased the integration PR to its latest SHA for a fresh kernel check.")
 
 
