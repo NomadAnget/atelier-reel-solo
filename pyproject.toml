@@ -5,7 +5,7 @@ description = "Atelier 变体:单一操作表单的视频翻译工具(仅本地�
 requires-python = "==3.11.*"
 dependencies = [
     # 平台内核(总线+存储枢纽+装配);变体域/管线经绝对导入 atelier_core.*
-    "atelier-core @ git+http://debian.lan:3257/Carnation/atelier-core.git",
+    "atelier-core @ git+https://github.com/NomadAnget/atelier-core.git@v0.2.6",
     # ── 以下 = 本变体所含域/管线(engines + pipeline-video 闭包)的运行时依赖,
     #    对齐旧 Architecture 的 GPU 推理栈(CUDA 锁死;video 几乎需要整条栈)──────────
     "fastapi>=0.115",
