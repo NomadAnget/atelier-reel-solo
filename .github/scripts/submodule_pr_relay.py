@@ -388,7 +388,7 @@ def refresh_parent_candidate(parent_repo: str, number: int, branch: str, old_hea
     })
     commit = api("POST", f"/repos/{parent_repo}/git/commits", {
         "message": f"ci(submodule): rebase {path} validation on {base_sha[:12]}",
-        "tree": tree["sha"], "parents": [base_sha],
+        "tree": tree["sha"], "parents": [old_head, base_sha],
     })
     body = marker_body(
         child_repo, child_number, child_sha, path, "check",
@@ -397,7 +397,7 @@ def refresh_parent_candidate(parent_repo: str, number: int, branch: str, old_hea
     )
     api("PATCH", f"/repos/{parent_repo}/pulls/{number}", {"body": body})
     api("PATCH", f"/repos/{parent_repo}/git/refs/heads/{urllib.parse.quote(branch, safe='/')}",
-        {"sha": commit["sha"], "force": True})
+        {"sha": commit["sha"], "force": False})
     print("Variant master advanced during validation; rebased the integration PR to its latest SHA for a fresh kernel check.")
 
 
