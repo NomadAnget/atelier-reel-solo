@@ -19,9 +19,9 @@ concurrency:
 
 jobs:
   shared-kernel-validation:
-    uses: NomadAnget/atelier-studio/.github/workflows/kernel-pr-auto-merge.yml@0aa931286042b0465482faa2e87e93089de9ac86
+    uses: NomadAnget/atelier-studio/.github/workflows/kernel-pr-auto-merge.yml@af64e5f0f65ee2a3caef0021c61a7ed6079937ca
     with:
-      coordinator-ref: 0aa931286042b0465482faa2e87e93089de9ac86
+      coordinator-ref: af64e5f0f65ee2a3caef0021c61a7ed6079937ca
     secrets:
       ATELIER_CI_TOKEN: ${{ secrets.ATELIER_CI_TOKEN }}
       GH_SYNC_TOKEN: ${{ secrets.GH_SYNC_TOKEN }}
